@@ -32,7 +32,7 @@ public class InputManager : MonoBehaviour
 
         if (isMouseDown)
         {
-            ball.UpdateLineRenderer(GetPower(), -GetDirection());
+            ball.UpdateLineRenderer(GetPower(), GetDirection());
         }
     }
 
