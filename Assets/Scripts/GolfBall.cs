@@ -2,10 +2,11 @@
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class GolfBall : MonoBehaviour {
 
-    public Vector2 MinSpeed;
-    public Vector2 MaxSpeed;
+    public Vector2 MinVelocity;
+    public Vector2 MaxVelocity;
     private Rigidbody2D rb;
     private LineRenderer lineRenderer;
 
@@ -20,23 +21,23 @@ public class GolfBall : MonoBehaviour {
         ClampSpeed();
     }
 
-    public bool IsMoving => rb.velocity.x < MinSpeed.x && rb.velocity.y < MinSpeed.y;
+    public bool IsMoving => rb.velocity.x < MinVelocity.x && rb.velocity.y < MinVelocity.y;
 
-    public void Shoot(float power, Vector2 direction)
+    public void Shoot(float velocity, Vector2 direction)
     {
         if (!IsMoving)
         {
             Debug.Log("Cannot shoot, ball velocity above min speed");
             return;
         }
-        rb.velocity = direction * power;
+        rb.velocity = direction * velocity;
     }
 
     private void ClampSpeed()
     {
         rb.velocity = new Vector2(
-             Math.Min(rb.velocity.x, MaxSpeed.x),
-             Math.Min(rb.velocity.y, MaxSpeed.y)
+             Math.Min(rb.velocity.x, MaxVelocity.x),
+             Math.Min(rb.velocity.y, MaxVelocity.y)
         );
     }
 
@@ -45,11 +46,11 @@ public class GolfBall : MonoBehaviour {
         lineRenderer.enabled = show;
     }
 
-    public void UpdateLineRenderer(float power, Vector3 direction)
+    public void UpdateLineRenderer(float velocity, Vector3 direction)
     {
         var startPoint = transform.position;
         startPoint.z = -1;
-        var endPoint = startPoint + (direction * power);
+        var endPoint = startPoint + (direction * velocity);
         endPoint.z = -1;
         lineRenderer.SetPosition(0, startPoint);
         lineRenderer.SetPosition(1, endPoint);

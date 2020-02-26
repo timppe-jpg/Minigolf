@@ -6,6 +6,7 @@ public class InputManager : MonoBehaviour
 
     private Vector3 mouseDownStartPosition;
     private bool isMouseDown;
+    public float ShootPower = 1.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +39,7 @@ public class InputManager : MonoBehaviour
 
     private float GetPower()
     {
-        return (mouseDownStartPosition - Camera.main.ScreenToWorldPoint(Input.mousePosition)).magnitude;
+        return (mouseDownStartPosition - Camera.main.ScreenToWorldPoint(Input.mousePosition)).magnitude * ShootPower;
     }
 
     private Vector3 GetDirection()
