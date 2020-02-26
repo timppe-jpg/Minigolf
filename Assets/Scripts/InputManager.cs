@@ -26,16 +26,23 @@ public class InputManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isMouseDown = false;
-            var power = (mouseDownStartPosition - Camera.main.ScreenToWorldPoint(Input.mousePosition)).magnitude;
-            var direction = (mouseDownStartPosition - Camera.main.ScreenToWorldPoint(Input.mousePosition)).normalized;
-            ball.Shoot(power, direction);
+            ball.Shoot(GetPower(), GetDirection());
             ball.ShowLineRender(false);
         }
 
         if (isMouseDown)
         {
-            ball.UpdateLineRenderer(mouseDownStartPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            ball.UpdateLineRenderer(GetPower(), -GetDirection());
         }
-        
+    }
+
+    private float GetPower()
+    {
+        return (mouseDownStartPosition - Camera.main.ScreenToWorldPoint(Input.mousePosition)).magnitude;
+    }
+
+    private Vector3 GetDirection()
+    {
+        return (mouseDownStartPosition - Camera.main.ScreenToWorldPoint(Input.mousePosition)).normalized;
     }
 }

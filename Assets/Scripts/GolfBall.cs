@@ -20,11 +20,11 @@ public class GolfBall : MonoBehaviour {
         ClampSpeed();
     }
 
-    private bool CanShoot => rb.velocity.x < MinSpeed.x && rb.velocity.y < MinSpeed.y;
+    public bool IsMoving => rb.velocity.x < MinSpeed.x && rb.velocity.y < MinSpeed.y;
 
     public void Shoot(float power, Vector2 direction)
     {
-        if (!CanShoot)
+        if (!IsMoving)
         {
             Debug.Log("Cannot shoot, ball velocity above min speed");
             return;
@@ -45,9 +45,11 @@ public class GolfBall : MonoBehaviour {
         lineRenderer.enabled = show;
     }
 
-    public void UpdateLineRenderer(Vector3 startPoint, Vector3 endPoint)
+    public void UpdateLineRenderer(float power, Vector3 direction)
     {
+        var startPoint = transform.position;
         startPoint.z = -1;
+        var endPoint = startPoint + (direction * power);
         endPoint.z = -1;
         lineRenderer.SetPosition(0, startPoint);
         lineRenderer.SetPosition(1, endPoint);
