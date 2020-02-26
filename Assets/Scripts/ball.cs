@@ -14,22 +14,30 @@ public class ball : MonoBehaviour {
     //private Vector2 position;
 
     public LineRenderer lineRenderer;
-    private bool aiming;
-    private Vector2 aimStart;
+    public bool isAiming;
+    public Vector2 aimStart;
 
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
-
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        if (aiming)
+        if (isAiming)
         {
-            lineRenderer.SetPosition(0, aimStart);
-            lineRenderer.SetPosition(1, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            Vector3 lineStart = transform.position;
+            
+
+            var cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 lineEnd = lineStart + ((Vector3)aimStart - cursorPos);
+
+            lineStart.z = -1;
+            lineEnd.z = -1;
+
+            lineRenderer.SetPosition(0, lineStart);
+            lineRenderer.SetPosition(1, lineEnd);
         }
         
 
@@ -58,16 +66,5 @@ public class ball : MonoBehaviour {
         }
         
         
-    }
-
-    void OnMouseDown()
-    {
-        aimStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        aiming = true;
-    }
-
-    private void OnMouseUp()
-    {
-        aiming = false;
     }
 }

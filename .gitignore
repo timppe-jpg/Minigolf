@@ -45,3 +45,5 @@ Assets/UnityVS/Editor/UnityVS.VersionSpecific.dll
 # BUILDS #
 # ============ #
 GGJ2017/Builds/*
+
+.vs/
