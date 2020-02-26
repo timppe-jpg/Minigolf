@@ -238,7 +238,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 10
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -258,12 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49fb563f36c9f6419c99f64306b8f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  maxSpeed: 30
-  minSpeed: 1
-  lineRenderer: {fileID: 1714827629}
-  isAiming: 0
-  aimStart: {x: 0, y: 0}
+  MinSpeed: {x: 0.1, y: 0.1}
+  MaxSpeed: {x: 10, y: 10}
 --- !u!212 &1714827626
 SpriteRenderer:
   m_ObjectHideFlags: 0
