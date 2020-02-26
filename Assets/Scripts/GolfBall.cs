@@ -46,11 +46,11 @@ public class GolfBall : MonoBehaviour {
         lineRenderer.enabled = show;
     }
 
-    public void UpdateLineRenderer(float velocity, Vector3 direction)
+    public void UpdateLineRenderer(float length, Vector3 direction)
     {
         var startPoint = transform.position;
         startPoint.z = -1;
-        var endPoint = startPoint + (direction * velocity);
+        var endPoint = startPoint + (direction * length);
         endPoint.z = -1;
         lineRenderer.SetPosition(0, startPoint);
         lineRenderer.SetPosition(1, endPoint);
