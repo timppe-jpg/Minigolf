@@ -1,0 +1,47 @@
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+UnityGenerated/
+Library/
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+ 
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.pidb.meta
+*.suo
+*.sln
+*.user
+*.unityproj
+.booproj
+
+ 
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DSStore?
+.
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# ============ #
+# UnityVS      #
+# ============ #
+/obj
+obj/
+Assets/UnityVS/Editor/UnityVS.VersionSpecific.dll
+
+# ============ #
+# BUILDS #
+# ============ #
+GGJ2017/Builds/*
