@@ -10,8 +10,11 @@ public class GolfBall : MonoBehaviour {
     private Rigidbody2D rb;
     private LineRenderer lineRenderer;
 
+    public float Velocity => rb.velocity.magnitude;
+    public Vector3 Position => transform.position;
+
     // Use this for initialization
-    void Start () {
+    void Awake () {
         rb = GetComponent<Rigidbody2D>();
         lineRenderer = GetComponent<LineRenderer>();
     }
@@ -31,6 +34,17 @@ public class GolfBall : MonoBehaviour {
             return;
         }
         rb.velocity = direction * velocity;
+    }
+
+    public void DrawTowardsPosition(Vector3 position, float force)
+    {
+        var distance = position - Position;
+        rb.velocity = distance * force;
+    }
+
+    public void AddForce(float force, Vector2 direction)
+    {
+        rb.AddForce(force * direction , ForceMode2D.Force);
     }
 
     private void ClampSpeed()
