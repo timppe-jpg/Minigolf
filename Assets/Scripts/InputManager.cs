@@ -58,7 +58,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private float GetMouseDragLength()
     {
-        return (mouseDownStartPosition - GetMousePosition()).magnitude;
+        return (ball.Position - GetMousePosition()).magnitude;
     }
 
     /// <summary>
@@ -66,6 +66,6 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private Vector3 GetDirection()
     {
-        return (mouseDownStartPosition - GetMousePosition()).normalized;
+        return (ball.Position - GetMousePosition()).normalized * -1;
     }
 }
