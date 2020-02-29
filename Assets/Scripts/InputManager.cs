@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
     private GolfBall ball;
+    private AimAssistant aimAssistant;
 
-    private Vector3 mouseDownStartPosition;
     private bool isMouseDown;
     public float ShootVelocity = 1.0f;
 
@@ -29,6 +28,8 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         ball = FindObjectOfType<GolfBall>();
+        aimAssistant = FindObjectOfType<AimAssistant>();
+        aimAssistant.SetUp(ball);
         currentAimSetting = aimModes.Default;
     }
 
@@ -43,9 +44,8 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            mouseDownStartPosition = GetMousePosition();
             isMouseDown = true;
-            ball.ShowLineRender(true);
+            aimAssistant.ShowLineRender(true);
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -53,12 +53,12 @@ public class InputManager : MonoBehaviour
             var shootVelocityPercentage =
                 Math.Min(GetMouseDragLength(), MaxDragLengthWorldUnits) / MaxDragLengthWorldUnits;
             ball.Shoot(shootVelocityPercentage * ShootVelocity, GetDirection());
-            ball.ShowLineRender(false);
+            aimAssistant.ShowLineRender(false);
         }
 
         if (isMouseDown)
         {
-            ball.UpdateLineRenderer(Math.Min(MaxDragLengthWorldUnits, GetMouseDragLength()) , GetDirection());
+            aimAssistant.UpdateLineRenderer(Math.Min(MaxDragLengthWorldUnits, GetMouseDragLength()) , GetDirection());
         }
     }
 

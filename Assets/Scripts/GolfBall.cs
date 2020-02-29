@@ -1,22 +1,20 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class GolfBall : MonoBehaviour {
 
     public Vector2 MinVelocity;
     public Vector2 MaxVelocity;
     private Rigidbody2D rb;
-    private LineRenderer lineRenderer;
+    
 
     public float Velocity => rb.velocity.magnitude;
     public Vector3 Position => transform.position;
 
-    // Use this for initialization
     void Awake () {
         rb = GetComponent<Rigidbody2D>();
-        lineRenderer = GetComponent<LineRenderer>();
     }
 	
 	// Update is called once per frame
@@ -53,20 +51,5 @@ public class GolfBall : MonoBehaviour {
              Math.Min(rb.velocity.x, MaxVelocity.x),
              Math.Min(rb.velocity.y, MaxVelocity.y)
         );
-    }
-
-    public void ShowLineRender(bool show)
-    {
-        lineRenderer.enabled = show;
-    }
-
-    public void UpdateLineRenderer(float length, Vector3 direction)
-    {
-        var startPoint = transform.position;
-        startPoint.z = -1;
-        var endPoint = startPoint + (direction * length);
-        endPoint.z = -1;
-        lineRenderer.SetPosition(0, startPoint);
-        lineRenderer.SetPosition(1, endPoint);
     }
 }
