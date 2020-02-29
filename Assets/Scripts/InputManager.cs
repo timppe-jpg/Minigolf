@@ -10,14 +10,7 @@ public class InputManager : MonoBehaviour
     private bool isMouseDown;
     public float ShootVelocity = 1.0f;
 
-    private enum aimModes
-    {
-        Default,
-        Reverse,
-        Rigth,
-        Left
-    }
-    private aimModes currentAimSetting;
+    public AimMode CurrentAimSetting { get; private set; }
 
     /// <summary>
     /// Distance of how many world units the mouse has to be dragged before maximum shoot velocity is reached.
@@ -30,7 +23,7 @@ public class InputManager : MonoBehaviour
         ball = FindObjectOfType<GolfBall>();
         aimAssistant = FindObjectOfType<AimAssistant>();
         aimAssistant.SetUp(ball);
-        currentAimSetting = aimModes.Default;
+        CurrentAimSetting = AimMode.Default;
     }
 
     // Update is called once per frame
@@ -38,8 +31,8 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            currentAimSetting = Enum.GetValues(typeof(aimModes)).Cast<aimModes>().SkipWhile(e => e != currentAimSetting).Skip(1).FirstOrDefault();
-            Debug.Log($"Current aim: {currentAimSetting}");
+            CurrentAimSetting = Enum.GetValues(typeof(AimMode)).Cast<AimMode>().SkipWhile(e => e != CurrentAimSetting).Skip(1).FirstOrDefault();
+            Debug.Log($"Current aim: {CurrentAimSetting}");
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -88,12 +81,12 @@ public class InputManager : MonoBehaviour
 
     private Vector3 AddAimModeModifier(Vector3 original)
     {
-        switch (currentAimSetting)
+        switch (CurrentAimSetting)
         {
-            case aimModes.Default: return original * -1f;
-            case aimModes.Reverse: return original;
-            case aimModes.Rigth: return new Vector3(original.y, original.x * -1f, 1f);
-            case aimModes.Left: return new Vector3(original.y * -1f, original.x, 1f);
+            case AimMode.Default: return original * -1f;
+            case AimMode.Reverse: return original;
+            case AimMode.Right: return new Vector3(original.y, original.x * -1f, 1f);
+            case AimMode.Left: return new Vector3(original.y * -1f, original.x, 1f);
         }
         return new Vector3();
     }
