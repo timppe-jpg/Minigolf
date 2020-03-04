@@ -6,6 +6,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     private GolfBall ball;
+    private AimigAssistant aimigAssistant;
 
     private Vector3 mouseDownStartPosition;
     private bool isMouseDown;
@@ -29,6 +30,7 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         ball = FindObjectOfType<GolfBall>();
+        aimigAssistant = FindObjectOfType<AimigAssistant>();
         currentAimSetting = aimModes.Default;
     }
 
@@ -59,6 +61,7 @@ public class InputManager : MonoBehaviour
         if (isMouseDown)
         {
             ball.UpdateLineRenderer(Math.Min(MaxDragLengthWorldUnits, GetMouseDragLength()) , GetDirection());
+            if(currentAimSetting != aimModes.Default)aimigAssistant.UpdateLineRenderer(ball.Position, GetMousePosition());
         }
     }
 
