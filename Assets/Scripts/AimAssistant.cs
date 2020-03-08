@@ -28,6 +28,7 @@ public class AimAssistant : MonoBehaviour
     {
         forceLine = AddLineRenderer(ForceLineColor, ForceLineWidth, "ForceLine");
         mousePositionLine = AddLineRenderer(MousePositionLineColor, MousePositionLineWidth, "MousePositionLine");
+        MakeDashed(mousePositionLine);
         crossHairXAxisLine = AddLineRenderer(CrossHairColor, CrossHairWidth, "CrossHairX");
         crossHairYAxisLine = AddLineRenderer(CrossHairColor, CrossHairWidth, "CrossHairY");
     }
@@ -44,7 +45,7 @@ public class AimAssistant : MonoBehaviour
         var child = new GameObject(childName);
         child.transform.SetParent(transform);
         var line = (LineRenderer) child.AddComponent(typeof(LineRenderer));
-        line.material = new Material(Shader.Find("Sprites/Default"));
+        line.material = new Material(Shader.Find("Unlit/Color")) {color = color};
         line.startColor = color;
         line.endColor = color;
         line.startWidth = width;
@@ -53,6 +54,14 @@ public class AimAssistant : MonoBehaviour
         return line;
     }
 
+    private static void MakeDashed(LineRenderer line)
+    {
+        line.material = new Material(Shader.Find("Unlit/Transparent"))
+        {
+            mainTexture = Resources.Load<Texture>(@"Sprites\DashedLine")
+        };
+        line.textureMode = LineTextureMode.Tile;
+    }
 
     public void SetUp(GolfBall ball)
     {
