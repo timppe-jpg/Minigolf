@@ -88,9 +88,9 @@ public class AimAssistant : MonoBehaviour
     {
         mousePositionLine.SetPosition(0, ball.Position);
         mousePositionLine.SetPosition(1, worldPosition);
-        crossHairXAxisLine.SetPosition(0, worldPosition + new Vector3(-CrossHairLength/2, 0,0 ));
-        crossHairXAxisLine.SetPosition(1, worldPosition + new Vector3(CrossHairLength/2, 0, 0));
-        crossHairYAxisLine.SetPosition(0, worldPosition + new Vector3(0, CrossHairLength / 2, 0));
-        crossHairYAxisLine.SetPosition(1, worldPosition + new Vector3(0, -CrossHairLength / 2, 0));
+        crossHairXAxisLine.SetPosition(0, worldPosition + new Vector3(-CrossHairLength/2, 0, -1 ));
+        crossHairXAxisLine.SetPosition(1, worldPosition + new Vector3(CrossHairLength/2, 0, -1));
+        crossHairYAxisLine.SetPosition(0, worldPosition + new Vector3(0, CrossHairLength / 2, -1));
+        crossHairYAxisLine.SetPosition(1, worldPosition + new Vector3(0, -CrossHairLength / 2, -1));
     }
 }
