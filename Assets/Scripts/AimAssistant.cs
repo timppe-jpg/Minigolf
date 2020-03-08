@@ -1,47 +1,87 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
 public class AimAssistant : MonoBehaviour
 {
+    public Color ForceLineColor = Color.red;
+    public float ForceLineWidth = 0.1f;
+    private LineRenderer forceLine;
 
-    private LineRenderer lineRenderer;
+    public Color CrossHairColor = Color.black;
+    public float CrossHairWidth = 0.1f;
+    public float CrossHairLength = 1.0f;
+    private LineRenderer crossHairXAxisLine;
+    private LineRenderer crossHairYAxisLine;
+
+    private LineRenderer mousePositionLine;
+    public Color MousePositionLineColor = Color.black;
+    public float MousePositionLineWidth = 0.05f;
+
     private GolfBall ball;
 
     // Use this for initialization
     void Awake()
     {
-        lineRenderer = GetComponent<LineRenderer>();
+        InitLineRenderers();
     }
+
+    private void InitLineRenderers()
+    {
+        forceLine = AddLineRenderer(ForceLineColor, ForceLineWidth, "ForceLine");
+        mousePositionLine = AddLineRenderer(MousePositionLineColor, MousePositionLineWidth, "MousePositionLine");
+        crossHairXAxisLine = AddLineRenderer(CrossHairColor, CrossHairWidth, "CrossHairX");
+        crossHairYAxisLine = AddLineRenderer(CrossHairColor, CrossHairWidth, "CrossHairY");
+    }
+
+    /// <summary>
+    /// Adds a child object to this gameObject and attaches a line renderer to the child
+    /// </summary>
+    /// <param name="color">Color of the line renderer</param>
+    /// <param name="width">Width of the line renderer</param>
+    /// <param name="childName">Child gameObject name</param>
+    /// <returns></returns>
+    private LineRenderer AddLineRenderer(Color color, float width, string childName)
+    {
+        var child = new GameObject(childName);
+        child.transform.SetParent(transform);
+        var line = (LineRenderer) child.AddComponent(typeof(LineRenderer));
+        line.material = new Material(Shader.Find("Sprites/Default"));
+        line.startColor = color;
+        line.endColor = color;
+        line.startWidth = width;
+        line.endWidth = width;
+        line.sortingOrder = 1;
+        return line;
+    }
+
 
     public void SetUp(GolfBall ball)
     {
         this.ball = ball;
     }
-
-    // Start is called before the first frame update
-    void Start()
+    
+    public void ShowForceLineRender(bool show)
     {
-        
+        forceLine.enabled = show;
+        mousePositionLine.enabled = show;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void ShowLineRender(bool show)
-    {
-        lineRenderer.enabled = show;
-    }
-
-    public void UpdateLineRenderer(float length, Vector3 direction)
+    public void UpdateForceLineRenderer(float length, Vector3 direction)
     {
         var startPoint = ball.Position;
         startPoint.z = -1;
         var endPoint = startPoint + (direction * length);
         endPoint.z = -1;
-        lineRenderer.SetPosition(0, startPoint);
-        lineRenderer.SetPosition(1, endPoint);
+        forceLine.SetPosition(0, startPoint);
+        forceLine.SetPosition(1, endPoint);
+    }
+
+    public void UpdateCrossHairPosition(Vector3 worldPosition)
+    {
+        mousePositionLine.SetPosition(0, ball.Position);
+        mousePositionLine.SetPosition(1, worldPosition);
+        crossHairXAxisLine.SetPosition(0, worldPosition + new Vector3(-CrossHairLength/2, 0,0 ));
+        crossHairXAxisLine.SetPosition(1, worldPosition + new Vector3(CrossHairLength/2, 0, 0));
+        crossHairYAxisLine.SetPosition(0, worldPosition + new Vector3(0, CrossHairLength / 2, 0));
+        crossHairYAxisLine.SetPosition(1, worldPosition + new Vector3(0, -CrossHairLength / 2, 0));
     }
 }

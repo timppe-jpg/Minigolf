@@ -24,6 +24,7 @@ public class InputManager : MonoBehaviour
         aimAssistant = FindObjectOfType<AimAssistant>();
         aimAssistant.SetUp(ball);
         CurrentAimSetting = AimMode.Default;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -38,7 +39,7 @@ public class InputManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             isMouseDown = true;
-            aimAssistant.ShowLineRender(true);
+            aimAssistant.ShowForceLineRender(true);
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -46,21 +47,23 @@ public class InputManager : MonoBehaviour
             var shootVelocityPercentage =
                 Math.Min(GetMouseDragLength(), MaxDragLengthWorldUnits) / MaxDragLengthWorldUnits;
             ball.Shoot(shootVelocityPercentage * ShootVelocity, GetDirection());
-            aimAssistant.ShowLineRender(false);
+            aimAssistant.ShowForceLineRender(false);
         }
 
         if (isMouseDown)
         {
-            aimAssistant.UpdateLineRenderer(Math.Min(MaxDragLengthWorldUnits, GetMouseDragLength()) , GetDirection());
+            aimAssistant.UpdateForceLineRenderer(Math.Min(MaxDragLengthWorldUnits, GetMouseDragLength()) , GetDirection());
         }
+        aimAssistant.UpdateCrossHairPosition(GetMouseWorldPosition());
     }
 
     /// <summary>
     /// Get current mouse position in world space
     /// </summary>
-    private Vector3 GetMousePosition()
+    private static Vector3 GetMouseWorldPosition()
     {
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return new Vector3(mousePosition.x, mousePosition.y, 0);
     }
     
     /// <summary>
@@ -68,7 +71,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private float GetMouseDragLength()
     {
-        return (ball.Position - GetMousePosition()).magnitude;
+        return (ball.Position - GetMouseWorldPosition()).magnitude;
     }
 
     /// <summary>
@@ -76,7 +79,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private Vector3 GetDirection()
     {
-        return AddAimModeModifier((ball.Position - GetMousePosition()).normalized);
+        return AddAimModeModifier((ball.Position - GetMouseWorldPosition()).normalized);
     }
 
     private Vector3 AddAimModeModifier(Vector3 original)
