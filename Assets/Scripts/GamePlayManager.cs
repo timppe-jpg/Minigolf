@@ -14,6 +14,6 @@ public class GamePlayManager : MonoBehaviour
 
     private void OnBallHoled(GolfBall ball)
     {
-        Destroy(ball.gameObject);
+        ball.gameObject.SetActive(false);
     }
 }

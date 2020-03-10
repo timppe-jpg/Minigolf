@@ -5,10 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class GolfBall : MonoBehaviour {
 
-    public Vector2 MinVelocity;
-    public Vector2 MaxVelocity;
+    public float MinVelocity = 0.1f;
+    public float MaxVelocity = 50f;
     private Rigidbody2D rb;
-    
 
     public float Velocity => rb.velocity.magnitude;
     public Vector3 Position => transform.position;
@@ -22,7 +21,7 @@ public class GolfBall : MonoBehaviour {
         ClampSpeed();
     }
 
-    public bool IsMoving => rb.velocity.x < MinVelocity.x && rb.velocity.y < MinVelocity.y;
+    public bool IsMoving => rb.velocity.magnitude < MinVelocity;
 
     public void Shoot(float velocity, Vector2 direction)
     {
@@ -47,9 +46,6 @@ public class GolfBall : MonoBehaviour {
 
     private void ClampSpeed()
     {
-        rb.velocity = new Vector2(
-             Math.Min(rb.velocity.x, MaxVelocity.x),
-             Math.Min(rb.velocity.y, MaxVelocity.y)
-        );
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, MaxVelocity);
     }
 }

@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetMouseButtonUp(1))
         {
             CurrentAimSetting = Enum.GetValues(typeof(AimMode)).Cast<AimMode>().SkipWhile(e => e != CurrentAimSetting).Skip(1).FirstOrDefault();
             Debug.Log($"Current aim: {CurrentAimSetting}");
@@ -86,7 +86,7 @@ public class InputManager : MonoBehaviour
     {
         switch (CurrentAimSetting)
         {
-            case AimMode.Default: return original * -1f;
+            case AimMode.Default: return -original;
             case AimMode.Reverse: return original;
             case AimMode.Right: return new Vector3(original.y, original.x * -1f, 1f);
             case AimMode.Left: return new Vector3(original.y * -1f, original.x, 1f);
