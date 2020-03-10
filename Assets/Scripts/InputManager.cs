@@ -86,7 +86,7 @@ public class InputManager : MonoBehaviour
     {
         switch (CurrentAimSetting)
         {
-            case AimMode.Default: return original * -1f;
+            case AimMode.Default: return -original;
             case AimMode.Reverse: return original;
             case AimMode.Right: return new Vector3(original.y, original.x * -1f, 1f);
             case AimMode.Left: return new Vector3(original.y * -1f, original.x, 1f);
