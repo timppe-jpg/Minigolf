@@ -44,6 +44,11 @@ public class GolfBall : MonoBehaviour {
         rb.AddForce(force * direction , ForceMode2D.Force);
     }
 
+    public void SetLinearDrag(float linearDrag)
+    {
+        rb.drag = linearDrag;
+    }
+
     private void ClampSpeed()
     {
         rb.velocity = Vector3.ClampMagnitude(rb.velocity, MaxVelocity);

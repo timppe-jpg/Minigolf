@@ -21,7 +21,25 @@ public class Hole : MonoBehaviour
     public float BallHoleDistanceThreshold = 0.1f;
 
     public Action<GolfBall> OnBallHoled;
-    
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        var ball = other.GetComponent<GolfBall>();
+        if (ball != null)
+        {
+            ball.SetLinearDrag(10f);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        var ball = other.GetComponent<GolfBall>();
+        if (ball != null)
+        {
+            ball.SetLinearDrag(1f);
+        }
+    }
+
     void OnTriggerStay2D(Collider2D other)
     {
         var ball = other.GetComponent<GolfBall>();
