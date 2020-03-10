@@ -474,11 +474,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ForceLineColor: {r: 1, g: 0, b: 0, a: 1}
   ForceLineWidth: 0.1
+  ForceLineZLayer: 2
   CrossHairColor: {r: 0, g: 0, b: 0, a: 1}
   CrossHairWidth: 0.1
   CrossHairLength: 1
+  CrossHairZLayer: 1
   MousePositionLineColor: {r: 0, g: 0, b: 0, a: 1}
   MousePositionLineWidth: 0.075
+  MousePositionLineZLayer: 1
 --- !u!1 &730141262
 GameObject:
   m_ObjectHideFlags: 0

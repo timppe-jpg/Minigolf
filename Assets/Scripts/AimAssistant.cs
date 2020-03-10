@@ -4,17 +4,20 @@ public class AimAssistant : MonoBehaviour
 {
     public Color ForceLineColor = Color.red;
     public float ForceLineWidth = 0.1f;
+    public int ForceLineZLayer = 2;
     private LineRenderer forceLine;
 
     public Color CrossHairColor = Color.black;
     public float CrossHairWidth = 0.1f;
     public float CrossHairLength = 1.0f;
+    public int CrossHairZLayer = 2;
     private LineRenderer crossHairXAxisLine;
     private LineRenderer crossHairYAxisLine;
 
     private LineRenderer mousePositionLine;
     public Color MousePositionLineColor = Color.black;
     public float MousePositionLineWidth = 0.05f;
+    public int MousePositionLineZLayer = 2;
 
     private GolfBall ball;
 
@@ -77,20 +80,25 @@ public class AimAssistant : MonoBehaviour
     public void UpdateForceLineRenderer(float length, Vector3 direction)
     {
         var startPoint = ball.Position;
-        startPoint.z = -1;
         var endPoint = startPoint + (direction * length);
-        endPoint.z = -1;
-        forceLine.SetPosition(0, startPoint);
-        forceLine.SetPosition(1, endPoint);
+        forceLine.SetPosition(0, GetZCorrectedPosition(startPoint, ForceLineZLayer));
+        forceLine.SetPosition(1, GetZCorrectedPosition(endPoint, ForceLineZLayer));
     }
 
     public void UpdateCrossHairPosition(Vector3 worldPosition)
     {
-        mousePositionLine.SetPosition(0, ball.Position);
-        mousePositionLine.SetPosition(1, worldPosition);
-        crossHairXAxisLine.SetPosition(0, worldPosition + new Vector3(-CrossHairLength/2, 0, -1 ));
-        crossHairXAxisLine.SetPosition(1, worldPosition + new Vector3(CrossHairLength/2, 0, -1));
-        crossHairYAxisLine.SetPosition(0, worldPosition + new Vector3(0, CrossHairLength / 2, -1));
-        crossHairYAxisLine.SetPosition(1, worldPosition + new Vector3(0, -CrossHairLength / 2, -1));
+        mousePositionLine.SetPosition(0, GetZCorrectedPosition(ball.Position, MousePositionLineZLayer));
+        mousePositionLine.SetPosition(1, GetZCorrectedPosition(worldPosition, MousePositionLineZLayer));
+        crossHairXAxisLine.SetPosition(0, GetZCorrectedPosition(worldPosition + new Vector3(-CrossHairLength/2, 0, 0 ), CrossHairZLayer));
+        crossHairXAxisLine.SetPosition(1, GetZCorrectedPosition(worldPosition + new Vector3(CrossHairLength/2, 0, 0), CrossHairZLayer));
+        crossHairYAxisLine.SetPosition(0, GetZCorrectedPosition(worldPosition + new Vector3(0, CrossHairLength / 2, 0), CrossHairZLayer));
+        crossHairYAxisLine.SetPosition(1, GetZCorrectedPosition(worldPosition + new Vector3(0, -CrossHairLength / 2, 0), CrossHairZLayer));
+    }
+
+    
+
+    private Vector3 GetZCorrectedPosition(Vector3 vector, int zLayer)
+    {
+        return new Vector3(vector.x, vector.y, -zLayer);
     }
 }
