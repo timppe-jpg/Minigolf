@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
     private GolfBall ball;
-    private AimigAssistant aimigAssistant;
+    private AimAssistant aimAssistant;
 
-    private Vector3 mouseDownStartPosition;
     private bool isMouseDown;
     public float ShootVelocity = 1.0f;
 
-    private enum aimModes
-    {
-        Default,
-        Reverse,
-        Rigth,
-        Left
-    }
-    private aimModes currentAimSetting;
+    public AimMode CurrentAimSetting { get; private set; }
 
     /// <summary>
     /// Distance of how many world units the mouse has to be dragged before maximum shoot velocity is reached.
@@ -30,24 +21,25 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         ball = FindObjectOfType<GolfBall>();
-        aimigAssistant = FindObjectOfType<AimigAssistant>();
-        currentAimSetting = aimModes.Default;
+        aimAssistant = FindObjectOfType<AimAssistant>();
+        aimAssistant.SetUp(ball);
+        CurrentAimSetting = AimMode.Default;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            currentAimSetting = Enum.GetValues(typeof(aimModes)).Cast<aimModes>().SkipWhile(e => e != currentAimSetting).Skip(1).FirstOrDefault();
-            Debug.Log($"Current aim: {currentAimSetting}");
+            CurrentAimSetting = Enum.GetValues(typeof(AimMode)).Cast<AimMode>().SkipWhile(e => e != CurrentAimSetting).Skip(1).FirstOrDefault();
+            Debug.Log($"Current aim: {CurrentAimSetting}");
         }
 
         if (Input.GetMouseButtonDown(0))
         {
-            mouseDownStartPosition = GetMousePosition();
             isMouseDown = true;
-            ball.ShowLineRender(true);
+            aimAssistant.ShowForceLineRender(true);
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -55,22 +47,23 @@ public class InputManager : MonoBehaviour
             var shootVelocityPercentage =
                 Math.Min(GetMouseDragLength(), MaxDragLengthWorldUnits) / MaxDragLengthWorldUnits;
             ball.Shoot(shootVelocityPercentage * ShootVelocity, GetDirection());
-            ball.ShowLineRender(false);
+            aimAssistant.ShowForceLineRender(false);
         }
 
         if (isMouseDown)
         {
-            ball.UpdateLineRenderer(Math.Min(MaxDragLengthWorldUnits, GetMouseDragLength()) , GetDirection());
-            if(currentAimSetting != aimModes.Default)aimigAssistant.UpdateLineRenderer(ball.Position, GetMousePosition());
+            aimAssistant.UpdateForceLineRenderer(Math.Min(MaxDragLengthWorldUnits, GetMouseDragLength()) , GetDirection());
         }
+        aimAssistant.UpdateCrossHairPosition(GetMouseWorldPosition());
     }
 
     /// <summary>
     /// Get current mouse position in world space
     /// </summary>
-    private Vector3 GetMousePosition()
+    private static Vector3 GetMouseWorldPosition()
     {
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return new Vector3(mousePosition.x, mousePosition.y, 0);
     }
     
     /// <summary>
@@ -78,7 +71,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private float GetMouseDragLength()
     {
-        return (ball.Position - GetMousePosition()).magnitude;
+        return (ball.Position - GetMouseWorldPosition()).magnitude;
     }
 
     /// <summary>
@@ -86,17 +79,17 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private Vector3 GetDirection()
     {
-        return AddAimModeModifier((ball.Position - GetMousePosition()).normalized);
+        return AddAimModeModifier((ball.Position - GetMouseWorldPosition()).normalized);
     }
 
     private Vector3 AddAimModeModifier(Vector3 original)
     {
-        switch (currentAimSetting)
+        switch (CurrentAimSetting)
         {
-            case aimModes.Default: return original * -1f;
-            case aimModes.Reverse: return original;
-            case aimModes.Rigth: return new Vector3(original.y, original.x * -1f, 1f);
-            case aimModes.Left: return new Vector3(original.y * -1f, original.x, 1f);
+            case AimMode.Default: return original * -1f;
+            case AimMode.Reverse: return original;
+            case AimMode.Right: return new Vector3(original.y, original.x * -1f, 1f);
+            case AimMode.Left: return new Vector3(original.y * -1f, original.x, 1f);
         }
         return new Vector3();
     }
