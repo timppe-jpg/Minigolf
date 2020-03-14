@@ -12,6 +12,8 @@ public class InputManager : MonoBehaviour
 
     public AimMode CurrentAimSetting { get; private set; }
 
+    public Action<GolfBall> OnBallShoot { get; set; }
+
     /// <summary>
     /// Distance of how many world units the mouse has to be dragged before maximum shoot velocity is reached.
     /// </summary>
@@ -46,6 +48,7 @@ public class InputManager : MonoBehaviour
             isMouseDown = false;
             var shootVelocityPercentage =
                 Math.Min(GetMouseDragLength(), MaxDragLengthWorldUnits) / MaxDragLengthWorldUnits;
+            OnBallShoot?.Invoke(ball);
             ball.Shoot(shootVelocityPercentage * ShootVelocity, GetDirection());
             aimAssistant.ShowForceLineRender(false);
         }

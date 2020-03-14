@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 
@@ -10,7 +11,17 @@ public class GolfBall : MonoBehaviour {
     private Rigidbody2D rb;
 
     public float Velocity => rb.velocity.magnitude;
-    public Vector3 Position => transform.position;
+
+    public Vector3 Position
+    {
+        get => transform.position;
+        set
+        {
+            transform.position = value;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = 0;
+        }
+    }
 
     void Awake () {
         rb = GetComponent<Rigidbody2D>();
